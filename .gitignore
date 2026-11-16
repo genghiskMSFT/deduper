@@ -31,6 +31,7 @@ Icon?
 *.log
 *.tmp
 *.temp
+tmp/
 
 # Editor folders/settings
 .vscode/

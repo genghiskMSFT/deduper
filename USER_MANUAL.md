@@ -156,6 +156,45 @@ python3 dedupe_and_organize.py ~/Downloads --apply --duplicate-action move --dup
 
 ---
 
+### Keep duplicates accessible using links
+
+Instead of moving or removing duplicate paths, replace their files with hard
+links (the default) or symbolic links:
+
+```bash
+# Windows
+python dedupe_and_organize.py "C:\Primary" "C:\Backup" --duplicates-action link
+
+# macOS / Linux
+python3 dedupe_and_organize.py ~/Primary ~/Backup --duplicates-action link
+```
+
+These commands only preview changes. Add `--apply` to make them, or
+`--link-type symlink` to select symbolic links. `--duplicates-action` and
+`--duplicate-action` mean the same thing; `--duplication-action` is also accepted.
+
+The first folder containing a matching file holds the retained copy. Folder
+order matters more than timestamps in this mode; the newest match within that
+folder is retained. Other copies become links at their existing paths. If the
+first folder has no match, the next matching folder is used, without copying
+anything into the first folder.
+
+Existing symbolic links and files with multiple hard links are left untouched
+by default, even if they point elsewhere (`--keep-existing-links`). Only ordinary
+duplicate files become new links. Use `--no-keep-existing-links` to allow
+replacing existing links too. This setting applies only to link mode.
+
+Hard links must be on the same filesystem/volume, and editing one linked copy
+changes them all. Symbolic links can cross filesystems but stop working if their
+target is moved or deleted. Windows may require Developer Mode or administrator
+rights for symbolic links. Unsupported links or permission errors leave the
+original duplicate untouched and are reported as errors.
+
+If you also use `--organize kept`, the retained file moves to the organization
+folder first, and the links point to that final location.
+
+---
+
 ## 8️⃣ Step 8 — Organize kept files
 
 ### **By year/month**
